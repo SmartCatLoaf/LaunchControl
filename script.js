@@ -13,6 +13,15 @@ controls.forEach((control) => {
     }
     selectedControl = control;
     selectedControl.classList.add("selected");
+
+    // If the control hasn't been set before, automatically set it to CC
+    if (selectedControl.textContent === "--") {
+      selectedControl.textContent = "CC 0";
+      messageType.value = "cc";
+      messageValue.value = "0";
+      messageValue.disabled = false;
+    }
+
     updateInspector();
   });
 });
