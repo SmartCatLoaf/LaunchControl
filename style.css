@@ -1,93 +1,72 @@
 body {
   margin: 0;
   display: flex;
-  height: 100vh;
+  flex-direction: column;
+  min-height: 100vh;
   background-color: hsl(0, 4%, 40%);
-
-  font-family: monospace;
+  font-family: Arial, sans-serif;
 }
 
-/*----------------------------------------------------------*/
+#menu,
+#inspect {
+  background-color: hsl(0, 0%, 21%);
+  padding: 1rem;
+  color: white;
+}
 
 #menu {
-  background-color: hsl(0, 0%, 21%);
-
+  height: 15vh;
   display: flex;
   justify-content: center;
-
-  position: absolute;
-  top: 0px;
-
-  z-index: -1;
-
-  width: 100vw;
-  height: 35%;
+  align-items: center;
 }
 
 #title {
-  font-size: 3rem;
+  font-size: 2.5rem;
+  text-align: center;
+  margin: 0;
 }
 
-/*----------------------------------------------------------*/
-
 #launchbuino {
-  width: 450px;
-  height: 280px;
-
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-
-  padding: 5px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
 }
 
 #encoders {
-  min-width: 450px;
-  min-height: 50px;
-
   display: flex;
-  justify-content: center;
-  gap: 60px;
-  flex-wrap: wrap;
-
-  padding-bottom: 5px;
-
-  font-size: 1rem;
+  justify-content: space-between;
+  width: 450px;
+  margin-bottom: 10px;
 }
 
 #pads {
-  width: 450px;
-  height: 225px;
-
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
   gap: 5px;
-  flex-wrap: wrap;
+  width: 450px;
 }
 
 button {
   width: 50px;
   height: 50px;
-
   border: 2px solid black;
   border-radius: 5px;
   background-color: hsl(0, 7%, 60%);
-
-  font-size: 1rem;
+  font-size: 0.8rem;
   font-weight: bold;
   color: black;
-
-  padding: 0px;
-
+  padding: 0;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .enc {
   border-radius: 25px;
   border: 2px dashed black;
-
-  padding: 0px;
 }
 
 button:hover {
@@ -98,32 +77,69 @@ button:active {
   background-color: hsl(0, 7%, 70%);
 }
 
-/*----------------------------------------------------------*/
-
-#inspect {
-  background-color: hsl(0, 0%, 21%);
-
-  position: absolute;
-  bottom: 0px;
-
-  z-index: -1;
-
-  width: 100vw;
-  height: 35%;
+button.selected {
+  border-color: white;
+  box-shadow: 0 0 10px white;
 }
 
-h1 {
-  font-size: 2rem;
+#inspect {
+  height: 25vh;
+  overflow-y: auto;
+}
+
+h2 {
+  font-size: 1.5rem;
   font-weight: bold;
+  margin: 0 0 1rem 0;
+}
 
-  padding-left: 20px;
+#controlProperties {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
 
-  color: white;
+.property {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+label {
+  font-weight: bold;
+}
+
+input,
+select {
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
 }
 
 #colorpicker {
-  width: 50px;
-  height: 50px;
+  width: 100px;
+  height: 40px;
+  padding: 0;
+}
 
-  z-index: 2;
+#hexColor {
+  width: 100px;
+}
+
+@media (max-width: 480px) {
+  #title {
+    font-size: 2rem;
+  }
+
+  #encoders,
+  #pads {
+    width: 100%;
+  }
+
+  button {
+    width: 40px;
+    height: 40px;
+    font-size: 0.7rem;
+  }
 }

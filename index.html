@@ -7,57 +7,79 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div id="menu">
+    <header id="menu">
       <h1 id="title">LAUNCH CONTROL</h1>
-    </div>
+    </header>
 
-    <div id="launchbuino">
+    <main id="launchbuino">
       <div id="encoders">
-        <button id="enc1" class="enc">CC 11</button>
-        <button id="enc2" class="enc">CC 12</button>
-        <button id="enc3" class="enc">CC 13</button>
-        <button id="enc4" class="enc">CC 14</button>
+        <button id="enc1" class="enc">--</button>
+        <button id="enc2" class="enc">--</button>
+        <button id="enc3" class="enc">--</button>
+        <button id="enc4" class="enc">--</button>
       </div>
-
       <div id="pads">
-        <button id="pad1">CC 11</button>
-        <button id="pad2">CC 12</button>
-        <button id="pad3">CC 13</button>
-        <button id="pad4"></button>
-        <button id="pad5"></button>
-        <button id="pad6"></button>
-        <button id="pad7"></button>
-        <button id="pad8"></button>
-        <button id="pad9"></button>
-        <button id="pad10"></button>
-        <button id="pad11"></button>
-        <button id="pad12"></button>
-        <button id="pad13"></button>
-        <button id="pad14"></button>
-        <button id="pad15"></button>
-        <button id="pad16"></button>
-        <button id="pad17"></button>
-        <button id="pad18"></button>
-        <button id="pad19"></button>
-        <button id="pad20"></button>
-        <button id="pad21"></button>
-        <button id="pad22"></button>
-        <button id="pad23"></button>
-        <button id="pad24"></button>
-        <button id="pad25"></button>
-        <button id="pad26"></button>
-        <button id="pad27"></button>
-        <button id="pad28"></button>
-        <button id="pad29"></button>
-        <button id="pad30"></button>
-        <button id="pad31"></button>
-        <button id="pad32"></button>
+        <button id="pad1">--</button>
+        <button id="pad2">--</button>
+        <button id="pad3">--</button>
+        <button id="pad4">--</button>
+        <button id="pad5">--</button>
+        <button id="pad6">--</button>
+        <button id="pad7">--</button>
+        <button id="pad8">--</button>
+        <button id="pad9">--</button>
+        <button id="pad10">--</button>
+        <button id="pad11">--</button>
+        <button id="pad12">--</button>
+        <button id="pad13">--</button>
+        <button id="pad14">--</button>
+        <button id="pad15">--</button>
+        <button id="pad16">--</button>
+        <button id="pad17">--</button>
+        <button id="pad18">--</button>
+        <button id="pad19">--</button>
+        <button id="pad20">--</button>
+        <button id="pad21">--</button>
+        <button id="pad22">--</button>
+        <button id="pad23">--</button>
+        <button id="pad24">--</button>
+        <button id="pad25">--</button>
+        <button id="pad26">--</button>
+        <button id="pad27">--</button>
+        <button id="pad28">--</button>
+        <button id="pad29">--</button>
+        <button id="pad30">--</button>
+        <button id="pad31">--</button>
+        <button id="pad32">--</button>
       </div>
-    </div>
+    </main>
 
-    <div id="inspect">
-      <h1>Inspect</h1>
-    </div>
+    <footer id="inspect">
+      <h2>Inspect</h2>
+      <div id="controlProperties">
+        <div class="property">
+          <label for="colorpicker">Color:</label>
+          <input type="color" id="colorpicker" />
+        </div>
+        <div class="property">
+          <label for="hexColor">Hex Color:</label>
+          <input type="text" id="hexColor" maxlength="7" />
+        </div>
+        <div class="property">
+          <label for="messageType">Message Type:</label>
+          <select id="messageType">
+            <option value="--">None</option>
+            <option value="cc">Control Change (CC)</option>
+            <option value="note">Note</option>
+            <option value="pc">Program Change</option>
+          </select>
+        </div>
+        <div class="property">
+          <label for="messageValue">Value:</label>
+          <input type="number" id="messageValue" min="0" max="127" />
+        </div>
+      </div>
+    </footer>
 
     <script src="script.js"></script>
   </body>
