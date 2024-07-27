@@ -25,7 +25,7 @@ body {
 }
 
 #title {
-  font-size: 5rem;
+  font-size: 3rem;
 }
 
 /*----------------------------------------------------------*/
@@ -113,7 +113,7 @@ button:active {
 }
 
 h1 {
-  font-size: 4rem;
+  font-size: 2rem;
   font-weight: bold;
 
   padding-left: 20px;
