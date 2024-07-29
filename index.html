@@ -1,16 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark-mode">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>LaunchControl</title>
     <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+    />
   </head>
   <body>
     <header id="menu">
+      <button id="menuToggle"><i class="fas fa-bars"></i></button>
       <h1 id="title">LAUNCH CONTROL</h1>
+      <button id="settingsToggle"><i class="fas fa-cog"></i></button>
     </header>
-
+    <div id="menuPanel" class="side-panel">
+      <button id="closeMenu"><i class="fas fa-times"></i></button>
+      <h2>Menu</h2>
+      <div class="menu-item">
+        <label>Theme:</label>
+        <div class="theme-switch">
+          <span>Dark</span>
+          <label class="switch">
+            <input type="checkbox" id="themeSwitch" />
+            <span class="slider round"></span>
+          </label>
+          <span>Light</span>
+        </div>
+      </div>
+      <div class="menu-item">
+        <label for="accentColor">Accent Color:</label>
+        <input type="color" id="accentColor" value="#2196F3" />
+      </div>
+    </div>
+    <div id="settingsPanel" class="side-panel">
+      <button id="closeSettings"><i class="fas fa-times"></i></button>
+      <h2>Settings</h2>
+      <div class="setting">
+        <label for="colorFormat">Color Format:</label>
+        <select id="colorFormat">
+          <option value="hex">HEX</option>
+          <option value="rgb">RGB</option>
+          <option value="hsl">HSL</option>
+        </select>
+      </div>
+    </div>
     <main id="launchbuino">
       <div id="encoders">
         <button id="enc1" class="enc">--</button>
@@ -53,7 +93,6 @@
         <button id="pad32">--</button>
       </div>
     </main>
-
     <footer id="inspect">
       <h2>Inspect</h2>
       <div id="controlProperties">
@@ -61,17 +100,63 @@
           <label for="colorpicker">Color:</label>
           <input type="color" id="colorpicker" />
         </div>
-        <div class="property">
-          <label for="hexColor">Hex Color:</label>
-          <input type="text" id="hexColor" maxlength="7" />
+        <div class="property color-inputs">
+          <label for="colorValue">Color Value:</label>
+          <input type="text" id="colorValue" />
+          <div class="rgb-inputs hidden">
+            <input
+              type="number"
+              id="redValue"
+              min="0"
+              max="255"
+              placeholder="R"
+            />
+            <input
+              type="number"
+              id="greenValue"
+              min="0"
+              max="255"
+              placeholder="G"
+            />
+            <input
+              type="number"
+              id="blueValue"
+              min="0"
+              max="255"
+              placeholder="B"
+            />
+          </div>
+          <div class="hsl-inputs hidden">
+            <input
+              type="number"
+              id="hueValue"
+              min="0"
+              max="360"
+              placeholder="H"
+            />
+            <input
+              type="number"
+              id="saturationValue"
+              min="0"
+              max="100"
+              placeholder="S"
+            />
+            <input
+              type="number"
+              id="lightnessValue"
+              min="0"
+              max="100"
+              placeholder="L"
+            />
+          </div>
         </div>
         <div class="property">
           <label for="messageType">Message Type:</label>
           <select id="messageType">
             <option value="--">None</option>
             <option value="cc">Control Change (CC)</option>
-            <option value="note">Note</option>
-            <option value="pc">Program Change</option>
+            <option value="pc">Program Change (PC)</option>
+            <option value="nn">Note Number (NN)</option>
           </select>
         </div>
         <div class="property">
@@ -80,7 +165,6 @@
         </div>
       </div>
     </footer>
-
     <script src="script.js"></script>
   </body>
 </html>
