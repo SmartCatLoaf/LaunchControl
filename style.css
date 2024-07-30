@@ -34,14 +34,17 @@ body {
   transition: all var(--transition-speed);
 }
 
+header,
+footer {
+  background-color: var(--header-footer-bg);
+  color: var(--header-footer-text);
+  padding: 1rem 2rem;
+}
+
 #menu {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: var(--header-footer-bg);
-  color: var(--header-footer-text);
-  padding: 1rem;
-  transition: all var(--transition-speed);
 }
 
 #title {
@@ -56,13 +59,6 @@ body {
   font-size: 1.5rem;
   cursor: pointer;
   color: var(--header-footer-text);
-  transition: transform var(--transition-speed);
-}
-
-#menuToggle:hover,
-#settingsToggle:hover {
-  transform: scale(1.1);
-  color: var(--accent-color);
 }
 
 .side-panel {
@@ -72,7 +68,7 @@ body {
   height: 100%;
   background-color: var(--bg-color);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  transition: all var(--transition-speed);
+  transition: transform 0.3s ease-in-out;
   padding: 2rem;
   box-sizing: border-box;
   z-index: 1000;
@@ -90,14 +86,6 @@ body {
   transform: translateX(0);
 }
 
-#menuPanel.visible {
-  left: 0;
-}
-
-#settingsPanel.visible {
-  right: 0;
-}
-
 #closeMenu,
 #closeSettings {
   position: absolute;
@@ -110,78 +98,7 @@ body {
   color: var(--text-color);
 }
 
-.menu-item,
-.setting {
-  margin-bottom: 1rem;
-}
-
-.theme-switch {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
-  margin: 0 10px;
-}
-
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  transition: 0.4s;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: white;
-  transition: 0.4s;
-}
-
-input:checked + .slider {
-  background-color: var(--accent-color);
-}
-
-input:checked + .slider:before {
-  transform: translateX(26px);
-}
-
-.slider.round {
-  border-radius: 34px;
-}
-
-.slider.round:before {
-  border-radius: 50%;
-}
-
-#accentColor {
-  width: 50px;
-  height: 30px;
-  padding: 0;
-  border: none;
-  border-radius: 5px;
-}
-
-#launchbuino {
+main {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -221,11 +138,6 @@ button {
 button:hover {
   transform: scale(1.05);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  border: 2px solid var(--accent-color);
-}
-
-button:active {
-  transform: scale(0.95);
 }
 
 button.selected {
@@ -237,74 +149,58 @@ button.selected {
 }
 
 #inspect {
-  background-color: var(--header-footer-bg);
-  color: var(--header-footer-text);
-  padding: 1rem;
-  transition: all var(--transition-speed);
+  padding: 1rem 2rem;
 }
 
-h2 {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin: 0 0 1rem 0;
-  color: var(--accent-color);
+#inspectTitle {
+  white-space: pre-line;
+  padding: 0 0 10px 0;
 }
 
 #controlProperties {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-}
-
-.property {
   display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  gap: 15px;
+  margin-top: 15px;
 }
 
-label {
-  font-weight: bold;
+#controlProperties > * {
+  flex: 1;
 }
 
-input,
-select {
-  padding: 0.5rem;
-  border-radius: 5px;
-  border: 1px solid var(--input-border);
+#messageType,
+#messageValue,
+#colorpicker,
+#hexColor {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  border-radius: 8px;
+  border: 2px solid var(--input-border);
   background-color: var(--input-bg);
   color: var(--text-color);
-  font-size: 1rem;
-  transition: all var(--transition-speed);
+  font-size: 16px;
 }
 
-input:focus,
-select:focus {
-  outline: none;
-  border-color: var(--accent-color);
+#colorControls {
+  display: flex;
+  gap: 10px;
 }
 
 #colorpicker {
-  width: 100%;
+  flex: 0 0 60px;
   height: 40px;
-  padding: 0;
 }
 
-#colorValue {
-  width: 100%;
-}
-
-.hidden {
-  display: none;
+#hexColor {
+  flex: 1;
 }
 
 @media (max-width: 480px) {
-  #title {
-    font-size: 1.5rem;
-  }
   #encoders,
   #pads {
     width: 100%;
   }
+
   button {
     width: 40px;
     height: 40px;

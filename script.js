@@ -1,127 +1,81 @@
-// LaunchControl App
-const colorpicker = document.getElementById("colorpicker");
-const colorValue = document.getElementById("colorValue");
+const controls = document.querySelectorAll("#encoders button, #pads button");
 const messageType = document.getElementById("messageType");
 const messageValue = document.getElementById("messageValue");
-const controls = document.querySelectorAll("#encoders button, #pads button");
-const menuToggle = document.getElementById("menuToggle");
-const settingsToggle = document.getElementById("settingsToggle");
-const menuPanel = document.getElementById("menuPanel");
-const settingsPanel = document.getElementById("settingsPanel");
-const closeMenu = document.getElementById("closeMenu");
-const closeSettings = document.getElementById("closeSettings");
+const colorpicker = document.getElementById("colorpicker");
+const hexColor = document.getElementById("hexColor");
 const themeSwitch = document.getElementById("themeSwitch");
-const accentColor = document.getElementById("accentColor");
-const colorFormat = document.getElementById("colorFormat");
-const inspectTitle = document.querySelector("#inspect h2");
+const inspectTitle = document.getElementById("inspectTitle");
+const colorControls = document.getElementById("colorControls");
+const controlProperties = document.getElementById("controlProperties");
 let selectedControl = null;
 
-controls.forEach((control) => {
+function initializeControls() {
+  const encodersContainer = document.getElementById("encoders");
+  const padsContainer = document.getElementById("pads");
+
+  for (let i = 1; i <= 4; i++) {
+    const encoder = document.createElement("button");
+    encoder.id = `enc${i}`;
+    encoder.className = "enc";
+    encoder.textContent = "--";
+    encodersContainer.appendChild(encoder);
+  }
+
+  for (let i = 1; i <= 32; i++) {
+    const pad = document.createElement("button");
+    pad.id = `pad${i}`;
+    pad.textContent = "--";
+    padsContainer.appendChild(pad);
+  }
+
+  document
+    .querySelectorAll("#encoders button, #pads button")
+    .forEach(addControlListener);
+}
+
+function addControlListener(control) {
   control.addEventListener("click", () => {
-    if (selectedControl) {
-      selectedControl.classList.remove("selected");
-    }
+    if (selectedControl) selectedControl.classList.remove("selected");
     selectedControl = control;
     selectedControl.classList.add("selected");
     if (selectedControl.textContent === "--") {
       selectedControl.textContent = "CC 0";
-      messageType.value = "cc";
-      messageValue.value = "0";
-      messageValue.disabled = false;
     }
     updateInspector();
   });
-});
-
-colorpicker.addEventListener("input", updateControlColor);
-colorValue.addEventListener("input", updateColorFromValue);
-messageType.addEventListener("change", updateControlMessage);
-messageValue.addEventListener("input", updateControlMessage);
-
-menuToggle.addEventListener("click", () => {
-  menuPanel.classList.toggle("visible");
-});
-
-settingsToggle.addEventListener("click", () => {
-  settingsPanel.classList.toggle("visible");
-});
-
-closeMenu.addEventListener("click", () => {
-  menuPanel.classList.remove("visible");
-});
-
-closeSettings.addEventListener("click", () => {
-  settingsPanel.classList.remove("visible");
-});
-
-themeSwitch.addEventListener("change", () => {
-  document.documentElement.classList.toggle("dark-mode");
-  updateAccentColor();
-});
-
-accentColor.addEventListener("input", () => {
-  document.documentElement.style.setProperty(
-    "--accent-color",
-    accentColor.value
-  );
-});
-
-colorFormat.addEventListener("change", updateInspector);
+}
 
 function updateInspector() {
   if (selectedControl) {
-    let controlType = selectedControl.id.startsWith("enc") ? "Encoder" : "Pad";
-    let controlNumber = selectedControl.id.replace(/\D/g, "");
+    controlProperties.style.display = "flex";
+    const controlType = selectedControl.id.startsWith("enc")
+      ? "Encoder"
+      : "Pad";
+    const controlNumber = selectedControl.id.replace(/\D/g, "");
     inspectTitle.textContent = `Inspect: ${controlType} ${controlNumber}`;
 
-    let color = selectedControl.style.backgroundColor;
-    if (color) {
-      colorpicker.value = rgbToHex(color);
-      updateColorValue(color);
-    } else {
-      colorpicker.value = "#969696";
-      updateColorValue("#969696");
-    }
-    let [type, value] = selectedControl.textContent.split(" ");
-    messageType.value = type === "--" ? "--" : type.toLowerCase();
+    const [type, value] = selectedControl.textContent.split(" ");
+    messageType.value = type === "--" ? "cc" : type.toLowerCase();
     messageValue.value = value || "0";
 
-    let isNone = messageType.value === "--";
-    let isEncoder = selectedControl.id.startsWith("enc");
-
-    colorpicker.parentElement.style.display =
-      isNone || isEncoder ? "none" : "block";
-    colorValue.parentElement.style.display =
-      isNone || isEncoder ? "none" : "block";
-    messageValue.disabled = isNone;
-
-    if (isEncoder) {
+    if (selectedControl.id.startsWith("enc")) {
       messageType.innerHTML = `
-        <option value="--">None</option>
         <option value="cc">Control Change (CC)</option>
+        <option value="pc">Program Change (PC)</option>
+        <option value="--">None</option>
       `;
+      colorControls.style.display = "none";
     } else {
       messageType.innerHTML = `
-        <option value="--">None</option>
         <option value="cc">Control Change (CC)</option>
         <option value="pc">Program Change (PC)</option>
         <option value="nn">Note Number (NN)</option>
+        <option value="--">None</option>
       `;
+      updateColorControls();
     }
-  }
-}
-
-function updateControlColor() {
-  if (selectedControl && !selectedControl.id.startsWith("enc")) {
-    selectedControl.style.backgroundColor = colorpicker.value;
-    updateColorValue(colorpicker.value);
-  }
-}
-
-function updateColorFromValue() {
-  if (isValidColor(colorValue.value) && !selectedControl.id.startsWith("enc")) {
-    colorpicker.value = colorValue.value;
-    updateControlColor();
+  } else {
+    resetInspect();
   }
 }
 
@@ -130,109 +84,87 @@ function updateControlMessage() {
     if (messageType.value === "--") {
       selectedControl.textContent = "--";
       messageValue.disabled = true;
-      colorpicker.parentElement.style.display = "none";
-      colorValue.parentElement.style.display = "none";
+      selectedControl.style.backgroundColor = "";
     } else {
       selectedControl.textContent = `${messageType.value.toUpperCase()} ${
         messageValue.value
       }`;
       messageValue.disabled = false;
-      if (!selectedControl.id.startsWith("enc")) {
-        colorpicker.parentElement.style.display = "block";
-        colorValue.parentElement.style.display = "block";
-      }
     }
+    updateColorControls();
   }
 }
 
-function updateColorValue(color) {
-  switch (colorFormat.value) {
-    case "hex":
-      colorValue.value = rgbToHex(color);
-      break;
-    case "rgb":
-      colorValue.value = color;
-      break;
-    case "hsl":
-      colorValue.value = rgbToHsl(color);
-      break;
+function updateColorControls() {
+  const isEncoder = selectedControl.id.startsWith("enc");
+  const isNone = messageType.value === "--";
+  colorControls.style.display = !isEncoder && !isNone ? "flex" : "none";
+  if (!isEncoder && !isNone) {
+    const currentColor = selectedControl.style.backgroundColor || "#969696";
+    colorpicker.value = rgbToHex(currentColor);
+    hexColor.value = colorpicker.value;
   }
 }
 
 function rgbToHex(rgb) {
-  if (!rgb) return "#969696";
   if (rgb.startsWith("#")) return rgb;
-  let [r, g, b] = rgb.match(/\d+/g);
-  return (
-    "#" +
-    ((1 << 24) + (parseInt(r) << 16) + (parseInt(g) << 8) + parseInt(b))
-      .toString(16)
-      .slice(1)
-  );
+  const [r, g, b] = rgb.match(/\d+/g);
+  return "#" + ((1 << 24) + (+r << 16) + (+g << 8) + +b).toString(16).slice(1);
 }
 
-function rgbToHsl(rgb) {
-  let [r, g, b] = rgb.match(/\d+/g).map((x) => x / 255);
-  let max = Math.max(r, g, b),
-    min = Math.min(r, g, b);
-  let h,
-    s,
-    l = (max + min) / 2;
-
-  if (max === min) {
-    h = s = 0;
-  } else {
-    let d = max - min;
-    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-    switch (max) {
-      case r:
-        h = (g - b) / d + (g < b ? 6 : 0);
-        break;
-      case g:
-        h = (b - r) / d + 2;
-        break;
-      case b:
-        h = (r - g) / d + 4;
-        break;
-    }
-    h /= 6;
-  }
-
-  return `hsl(${Math.round(h * 360)}, ${Math.round(s * 100)}%, ${Math.round(
-    l * 100
-  )}%)`;
+function toggleTheme() {
+  document.documentElement.classList.toggle("dark-mode");
 }
 
-function isValidColor(color) {
-  let s = new Option().style;
-  s.color = color;
-  return s.color !== "";
+function togglePanel(panelId) {
+  const panel = document.getElementById(panelId);
+  panel.classList.toggle("visible");
 }
 
-// Initialize with the first control selected
-if (controls.length > 0) {
-  selectedControl = controls[0];
-  selectedControl.classList.add("selected");
-  updateInspector();
+function resetInspect() {
+  inspectTitle.textContent = "Inspect";
+  controlProperties.style.display = "none";
 }
 
-// Close panels when clicking outside
-document.addEventListener("click", (event) => {
-  if (!menuPanel.contains(event.target) && !menuToggle.contains(event.target)) {
-    menuPanel.classList.remove("visible");
-  }
+messageType.addEventListener("change", updateControlMessage);
+messageValue.addEventListener("input", () => {
+  messageValue.value = Math.max(0, Math.min(127, messageValue.value));
+  updateControlMessage();
+});
+
+colorpicker.addEventListener("input", () => {
   if (
-    !settingsPanel.contains(event.target) &&
-    !settingsToggle.contains(event.target)
+    selectedControl &&
+    !selectedControl.id.startsWith("enc") &&
+    messageType.value !== "--"
   ) {
-    settingsPanel.classList.remove("visible");
+    selectedControl.style.backgroundColor = colorpicker.value;
+    hexColor.value = colorpicker.value;
   }
 });
 
-// Update message type options
-messageType.innerHTML = `
-  <option value="--">None</option>
-  <option value="cc">Control Change (CC)</option>
-  <option value="pc">Program Change (PC)</option>
-  <option value="nn">Note Number (NN)</option>
-`;
+hexColor.addEventListener("input", () => {
+  if (/^#[0-9A-F]{6}$/i.test(hexColor.value)) {
+    colorpicker.value = hexColor.value;
+    selectedControl.style.backgroundColor = hexColor.value;
+  }
+});
+
+themeSwitch.addEventListener("change", toggleTheme);
+
+["menuToggle", "settingsToggle", "closeMenu", "closeSettings"].forEach((id) => {
+  const element = document.getElementById(id);
+  element.addEventListener("click", (event) => {
+    event.stopPropagation();
+    const panelId = id.includes("menu") ? "menuPanel" : "settingsPanel";
+    togglePanel(panelId);
+  });
+});
+
+// Initialize
+document.addEventListener("DOMContentLoaded", () => {
+  initializeControls();
+  resetInspect();
+  document.documentElement.classList.add("dark-mode");
+  themeSwitch.checked = false;
+});
