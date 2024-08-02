@@ -116,11 +116,6 @@ function toggleTheme() {
   document.documentElement.classList.toggle("dark-mode");
 }
 
-function togglePanel(panelId) {
-  const panel = document.getElementById(panelId);
-  panel.classList.toggle("visible");
-}
-
 function resetInspect() {
   inspectTitle.textContent = "Inspect";
   controlProperties.style.display = "none";
@@ -152,13 +147,36 @@ hexColor.addEventListener("input", () => {
 
 themeSwitch.addEventListener("change", toggleTheme);
 
-["menuToggle", "settingsToggle", "closeMenu", "closeSettings"].forEach((id) => {
-  const element = document.getElementById(id);
-  element.addEventListener("click", (event) => {
-    event.stopPropagation();
+function closeAllPanels() {
+  document.getElementById("menuPanel").style.transform = "translateX(-100%)";
+  document.getElementById("settingsPanel").style.transform = "translateX(100%)";
+}
+
+document.body.addEventListener("click", closeAllPanels);
+
+["menuPanel", "settingsPanel"].forEach((panelId) => {
+  const panel = document.getElementById(panelId);
+  panel.addEventListener("click", (e) => e.stopPropagation());
+});
+
+["menuToggle", "settingsToggle"].forEach((id) => {
+  document.getElementById(id).addEventListener("click", (e) => {
+    e.stopPropagation();
     const panelId = id.includes("menu") ? "menuPanel" : "settingsPanel";
-    togglePanel(panelId);
+    const panel = document.getElementById(panelId);
+    panel.style.transform =
+      panel.style.transform === "translateX(0px)" ? "" : "translateX(0px)";
   });
+});
+
+document.getElementById("closeMenu").addEventListener("click", (e) => {
+  e.stopPropagation();
+  document.getElementById("menuPanel").style.transform = "translateX(-100%)";
+});
+
+document.getElementById("closeSettings").addEventListener("click", (e) => {
+  e.stopPropagation();
+  document.getElementById("settingsPanel").style.transform = "translateX(100%)";
 });
 
 // Initialize
