@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Orbitron:wght@400;700&display=swap");
+
 :root {
   --bg-color: #f0f0f0;
   --text-color: #333;
@@ -6,9 +8,10 @@
   --header-footer-bg: #e0e0e0;
   --header-footer-text: #333;
   --input-bg: #fff;
-  --input-border: #ccc;
+  --input-border: #aaa;
   --transition-speed: 0.3s;
-  --accent-color: #000000;
+  --accent-color: #3498db;
+  --accent-color-hover: #2980b9;
 }
 
 .dark-mode {
@@ -20,7 +23,8 @@
   --header-footer-text: #f0f0f0;
   --input-bg: #333;
   --input-border: #555;
-  --accent-color: #ffffff;
+  --accent-color: #3498db;
+  --accent-color-hover: #2980b9;
 }
 
 body {
@@ -29,16 +33,23 @@ body {
   flex-direction: column;
   min-height: 100vh;
   background-color: var(--bg-color);
+  background-image: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0) 70%
+  );
   color: var(--text-color);
   font-family: "Roboto", sans-serif;
   transition: all var(--transition-speed);
+  overflow-x: hidden;
 }
 
 header,
 footer {
   background-color: var(--header-footer-bg);
   color: var(--header-footer-text);
-  padding: 1rem 2rem;
+  padding: 1rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 #menu {
@@ -50,15 +61,40 @@ footer {
 #title {
   font-size: 2rem;
   margin: 0;
+  font-family: "Orbitron", sans-serif;
+  font-weight: 700;
+  text-align: center;
+  flex: 1;
+}
+
+.menu-icon {
+  width: 24px;
+  height: 24px;
+  fill: var(--header-footer-text);
 }
 
 #menuToggle,
 #settingsToggle {
   background: none;
-  border: none;
-  font-size: 1.5rem;
+  border: 2px solid var(--header-footer-text);
+  border-radius: 5px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
-  color: var(--header-footer-text);
+  transition: all var(--transition-speed);
+}
+
+#menuToggle:hover,
+#settingsToggle:hover {
+  background-color: var(--header-footer-text);
+}
+
+#menuToggle:hover .menu-icon,
+#settingsToggle:hover .menu-icon {
+  fill: var(--header-footer-bg);
 }
 
 .side-panel {
@@ -67,12 +103,12 @@ footer {
   height: 100%;
   width: 300px;
   transition: transform 0.3s ease-in-out;
-
   background-color: var(--bg-color);
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
   padding: 2rem;
   box-sizing: border-box;
   z-index: 1000;
+  overflow-y: auto;
 }
 
 #menuPanel {
@@ -109,15 +145,17 @@ main {
 #encoders {
   display: flex;
   justify-content: space-between;
-  width: 450px;
-  margin-bottom: 10px;
+  width: 100%;
+  max-width: 450px;
+  margin-bottom: 20px;
 }
 
 #pads {
   display: grid;
   grid-template-columns: repeat(8, 1fr);
-  gap: 5px;
-  width: 450px;
+  gap: 10px;
+  width: 100%;
+  max-width: 450px;
 }
 
 button {
@@ -132,6 +170,9 @@ button {
   cursor: pointer;
   transition: all var(--transition-speed);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  font-family: "Orbitron", sans-serif;
+  position: relative;
+  overflow: hidden;
 }
 
 button:hover {
@@ -152,8 +193,9 @@ button.selected {
 }
 
 #inspectTitle {
-  white-space: pre-line;
-  padding: 0 0 10px 0;
+  font-family: "Orbitron", sans-serif;
+  font-weight: 700;
+  margin-bottom: 1rem;
 }
 
 #controlProperties {
@@ -194,10 +236,119 @@ button.selected {
   flex: 1;
 }
 
-@media (max-width: 480px) {
+.theme-switch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: var(--accent-color);
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+/* Dynamic text color for buttons */
+button::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  text-shadow: 0 0 2px #000;
+}
+
+button[style*="background-color"]::after {
+  color: #000;
+  text-shadow: 0 0 2px #fff;
+}
+
+/* Color scheme generator styles */
+.color-scheme {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.color-swatch {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.color-swatch:hover {
+  transform: scale(1.1);
+}
+
+/* Quick view styles (desktop only) */
+@media (min-width: 769px) {
+  .quick-view {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background-color: var(--button-bg);
+    border-radius: 10px;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 200;
+  }
+
+  button:hover .quick-view {
+    display: flex;
+  }
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
   #encoders,
   #pads {
-    width: 100%;
+    max-width: 100%;
   }
 
   button {
@@ -205,4 +356,63 @@ button.selected {
     height: 40px;
     font-size: 0.7rem;
   }
+
+  #title {
+    font-size: 1.5rem;
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  #controlProperties {
+    flex-direction: column;
+  }
+
+  #colorControls {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  #colorpicker {
+    flex: 0 0 50px;
+  }
+
+  #hexColor {
+    flex: 1;
+    margin-left: 10px;
+  }
+
+  #menu {
+    flex-wrap: wrap;
+  }
+
+  #menuToggle,
+  #settingsToggle {
+    order: -1;
+  }
+
+  #title {
+    order: 0;
+    width: 100%;
+    margin: 10px 0;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.side-panel {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* SVG icons */
+.menu-icon {
+  width: 24px;
+  height: 24px;
 }
